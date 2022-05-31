@@ -1,5 +1,5 @@
-#ifndef uitlity_H
-#define utility_H
+#ifndef UTILITY_H
+#define UTILITY_H
 
 #include <string>
 #include <fstream>
@@ -12,6 +12,7 @@
 #include <map>
 #include <locale>
 #include <iomanip>
+#include <algorithm>
 
 using namespace std;
 
@@ -29,6 +30,8 @@ class Operation
 public:
     string operationType;
     map<string, string> parameters;
+    bool ignoreCase=false;
+    bool useRegex=false;
 
     static string Search(const string &inputStr, Operation *op);
     static string Sequence(const string &inputStr, Operation *op);
@@ -52,8 +55,6 @@ enum indexVal
 
 void Help();
 
-#endif
-
 /*
 regex
 
@@ -66,3 +67,5 @@ hello
 world
 
 */
+
+#endif // UTILITY_H

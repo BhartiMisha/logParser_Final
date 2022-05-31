@@ -22,9 +22,12 @@ void Help()
 
     cout << "SEARCH: " << endl;
     cout << "Keyword: search" << endl;
-    cout << "Syntax: search parameterType dataValue" << endl;
+    cout << "Syntax: search [-i] [-r] parameterType dataValue" << endl;
     cout << "Here, parameterType is considered for searching of logs" << endl;
     cout << "and, dataValue is the value passed which is to be searched" << endl;
+    cout << "-i will search for messages by ignoring the case" << endl;
+    cout << "-r will search for messages by treating the input as a regex" << endl;
+    cout << "Note that -i and -r are only applicable to parameterType message" << endl;
     cout << "Example: search job_id 2" << endl << endl;
 
     cout << "SEQUENCE: " << endl;
