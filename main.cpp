@@ -35,14 +35,37 @@ int main(int argc, char **argv)
     {
         if(!strcmp(argv[i], "search"))
         {
-            map<string, string> tempParameters;
-            for(int j = i + 1; j < argc && (strcmp(argv[j], "AND")); j += 2 )
+            bool ignoreCase = false;
+            bool useRegex = false;
+            int idxParam = i+1;
+
+            while(idxParam < argc)
             {
-                tempParameters.insert(make_pair(argv[j], argv[j + 1]));
+                if(!strcmp(argv[idxParam], "-i"))
+                {
+                    ignoreCase = true;
+                    idxParam++;
+                    continue;
+                }
+                if(!strcmp(argv[idxParam], "-r"))
+                {
+                    useRegex = true;
+                    idxParam++;
+                    continue;
+                }
+                break;
+            }
+            map<string, string> tempParameters;
+            for(; idxParam < argc && (strcmp(argv[idxParam], "AND")); idxParam += 2 )
+            {
+                tempParameters.insert(make_pair(argv[idxParam], argv[idxParam + 1]));
             }
 
-            operations.push_back(new Operation(argv[i], tempParameters));
-            i += (tempParameters.size() * 2) + 2;
+            auto operation = new Operation(argv[i], tempParameters);
+            operation->useRegex = useRegex;
+            operation->ignoreCase = ignoreCase;
+            operations.push_back(operation);
+            i = idxParam+1;
 
         }
         else if(!strcmp(argv[i], "sequence"))
@@ -93,7 +116,7 @@ int main(int argc, char **argv)
     }
 
 
-    
+
 
     for(; searchIndex < operations.size(); searchIndex++)
     {

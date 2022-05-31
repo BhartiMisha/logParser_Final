@@ -168,7 +168,7 @@ string Operation::Search(const string &inputStr, Operation *operate)
         resultFinal = newInput;
     }
 
-    
+
     for (itr = operate->parameters.begin(); itr != operate->parameters.end(); ++itr)
     {
         cout << itr->first << endl;
@@ -213,9 +213,28 @@ string Operation::Search(const string &inputStr, Operation *operate)
             }
             else if (itr->first == "message")
             {
-                if (regex_search(log->logVal[column], m, regex(itr->second)))
+                auto messageField = log->logVal[column];
+                auto flags = regex_constants::ECMAScript;
+                auto toMatch = itr->second;
+                if(operate->useRegex)
                 {
-                    result += line + "\n";
+                    if(operate->ignoreCase) flags |= regex_constants::icase;
+                    if (regex_search(log->logVal[column], m, regex(itr->second, flags)))
+                    {
+                        result += line + "\n";
+                    }
+                }
+                else
+                {
+                    if(operate->ignoreCase)
+                    {
+                        transform(messageField.begin(), messageField.end(), messageField.begin(), ::tolower);
+                        transform(toMatch.begin(), toMatch.end(), toMatch.begin(), ::tolower);
+                    }
+                    if(messageField.find(toMatch) != string::npos)
+                    {
+                        result += line + "\n";
+                    }
                 }
             }
             else if (!log->logVal[column].compare(itr->second))
